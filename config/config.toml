@@ -1,0 +1,17 @@
+[rabbit]
+user = "admin"
+password = "admin"
+port = 5672
+host = "example.rabbit"
+
+[logging]
+level = "INFO"
+json_format = false
+include_trace = true
+
+[api]
+host = "0.0.0.0"
+port = 8080
+
+[trace]
+otlp_endpoint = "http://example.tempo:4317"
