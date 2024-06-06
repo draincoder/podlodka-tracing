@@ -3,6 +3,7 @@ import json
 import logging
 import random
 from decimal import Decimal
+from typing import Any
 
 from aio_pika import Exchange, Message
 from opentelemetry import propagate, trace
@@ -26,7 +27,7 @@ async def handle_trade(message: Message, dest_exchange: Exchange) -> None:
 
     remote_context = propagate.extract(message.headers)
 
-    msg_attributes = {
+    msg_attributes: dict[str, Any] = {
         SpanAttributes.MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES: message.body_size or 0,
         SpanAttributes.MESSAGING_MESSAGE_CONVERSATION_ID: message.correlation_id or "",
     }
@@ -48,7 +49,7 @@ async def handle_trade(message: Message, dest_exchange: Exchange) -> None:
         trade_data["status"] = "CLOSED"
 
         with tracer.start_as_current_span("notifications publish", attributes=msg_attributes) as span:
-            headers = {}
+            headers: dict[str, Any] = {}
             context = trace.set_span_in_context(span)
             propagate.inject(headers, context=context)
 

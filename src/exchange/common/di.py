@@ -18,6 +18,6 @@ class ExchangeProvider(Provider):
     async def get_exchange(self) -> AsyncIterable[Exchange]:
         connection = await get_connection(self._rabbit_url)
         channel = await connection.channel()
-        exchange = await setup_exchange(self._exchange_name, channel)
-        yield exchange
+        exchange = await setup_exchange(self._exchange_name, channel)  # type: ignore[arg-type]
+        yield exchange  # type: ignore[misc]
         await connection.close()

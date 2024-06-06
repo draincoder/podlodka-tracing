@@ -3,6 +3,7 @@ import json
 import logging
 import random
 import uuid
+from typing import Any
 
 from aio_pika import Exchange, Message
 from dishka import FromDishka
@@ -44,7 +45,7 @@ async def create_order(order: Order, exchange: FromDishka[Exchange]) -> OrderCre
     with tracer.start_as_current_span("publish to trade", attributes=order_attributes) as span:
         message_body = json.dumps(order_attributes).encode("utf-8")
 
-        headers = {}
+        headers: dict[str, Any] = {}
         context = trace.set_span_in_context(span)
         propagate.inject(headers, context=context)
 

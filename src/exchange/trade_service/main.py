@@ -40,7 +40,7 @@ async def main() -> None:
         async for message in queue_iter:
             async with message.process():
                 try:
-                    await handle_trade(message, dest_exchange)
+                    await handle_trade(message, dest_exchange)  # type: ignore[arg-type]
                 except Exception as e:
                     logger.exception(e)  # noqa: TRY401
 
